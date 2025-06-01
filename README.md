@@ -12,7 +12,8 @@ _Built for applications powered by [http-error-kit][http-error-kit], this middle
 [![npm version](https://img.shields.io/npm/v/%40wthek%2Fnestjs-middleware?color=brightgreen)](https://www.npmjs.com/package/@wthek/nestjs-middleware)
 [![GitHub license](https://img.shields.io/github/license/skillnter/wthek-nestjs-middleware?color=brightgreen)](LICENSE)
 [![GitHub Issues](https://img.shields.io/github/issues/Skillnter/wthek-nestjs-middleware)](https://github.com/Skillnter/wthek-nestjs-middleware/issues)
-
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/06de705481ac4f9db62a08328b4af81b)](https://app.codacy.com/gh/Skillnter/wthek-nestjs-middleware/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/06de705481ac4f9db62a08328b4af81b)](https://app.codacy.com/gh/Skillnter/wthek-nestjs-middleware/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 ![npms.io (final)](https://img.shields.io/npms-io/maintenance-score/%40wthek%2Fnestjs-middleware?color=brightgreen)
 ![npm](https://img.shields.io/npm/dy/%40wthek%2Fnestjs-middleware)
 [![Socket Badge](https://socket.dev/api/badge/npm/package/@wthek/nestjs-middleware/1.0.0)](https://socket.dev/npm/package/@wthek/nestjs-middleware/overview/1.0.0)
