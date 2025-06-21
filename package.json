@@ -1,6 +1,6 @@
 {
     "name": "@wthek/nestjs-middleware",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "NestJS middleware for handling and formatting errors using http-error-kit. Automatically detects and supports both Express and Fastify-based NestJS apps to ensure structured error responses with correct HTTP status codes.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
