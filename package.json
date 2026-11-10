@@ -1,13 +1,25 @@
 {
     "name": "@wthek/nestjs-middleware",
-    "version": "1.0.1",
-    "description": "NestJS middleware for handling and formatting errors using http-error-kit. Automatically detects and supports both Express and Fastify-based NestJS apps to ensure structured error responses with correct HTTP status codes.",
+    "version": "1.1.0",
+    "description": "Production-safe NestJS error-handling middleware for http-error-kit. Automatically detects and supports both Express and Fastify-based NestJS applications with configurable options and structured error formatting.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        },
+        "./package.json": "./package.json"
+    },
+    "sideEffects": false,
+    "engines": {
+        "node": ">=18"
+    },
     "scripts": {
         "test": "jest --config jest.config.ts",
         "build": "tsc --build",
-        "coverage": "jest --coverage --config jest.config.ts"
+        "coverage": "jest --coverage --config jest.config.ts",
+        "prepublishOnly": "npm run test && npm run build"
     },
     "repository": {
         "type": "git",
@@ -21,6 +33,17 @@
         "custom-errors",
         "error-handling",
         "nestjs",
+        "nestjs-middleware",
+        "nestjs-error-handler",
+        "fastify-error-handler",
+        "express-error-handler",
+        "rest-api",
+        "status-codes",
+        "api-error",
+        "json-error",
+        "typescript",
+        "middleware",
+        "wthek",
         "skillnter",
         "express",
         "fastify"
@@ -32,11 +55,14 @@
     },
     "homepage": "https://github.com/Skillnter/wthek-nestjs-middleware#readme",
     "dependencies": {
-        "@nestjs/common": "^11.1.2",
-        "@wthek/express-middleware": "^1.0.0",
-        "@wthek/fastify-middleware": "^1.0.1"
+        "@wthek/express-middleware": "^1.1.0",
+        "@wthek/fastify-middleware": "^1.1.0"
+    },
+    "peerDependencies": {
+        "@nestjs/common": "^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0"
     },
     "devDependencies": {
+        "@nestjs/common": "^11.1.2",
         "@types/jest": "^29.5.14",
         "@types/node": "^22.13.4",
         "@typescript-eslint/eslint-plugin": "^8.22.0",
