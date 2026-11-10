@@ -1,9 +1,10 @@
-import { KitNestJsMiddleware } from "../src";
+import { KitNestJsMiddleware, IKitNestJsMiddlewareOptions } from "../src";
 import { INestApplication } from "@nestjs/common";
 import { FastifyInstance } from "fastify";
-import { KitFastifyMiddleware } from "@wthek/fastify-middleware";
+import * as expressMiddlewarePkg from "@wthek/express-middleware";
+import * as fastifyMiddlewarePkg from "@wthek/fastify-middleware";
 
-describe("KitFastifyMiddleware", () => {
+describe("KitNestJsMiddleware", () => {
     let app: INestApplication;
     const AdaptorTypes = {
         ERROR: "error",
@@ -11,71 +12,106 @@ describe("KitFastifyMiddleware", () => {
         FASTIFY: "fastify",
     };
 
-    it("should return error when type is neither 'express' or 'fastify'", async () => {
-        try {
-            app = {
-                getHttpAdapter: () => {
-                    return {
-                        getType: () => AdaptorTypes.ERROR,
-                        getInstance: () => {
-                            return {
-                                setErrorHandler: jest.fn(),
-                            } as unknown as FastifyInstance;
-                        },
-                    };
-                },
-            } as unknown as INestApplication;
-            await KitNestJsMiddleware(app);
-        } catch (error: any) {
-            expect(error.message).toBe(
-                `[WTHek] Unsupported HTTP adapter: ${AdaptorTypes.ERROR}`
-            );
-        }
+    it("should throw error when adapter type is neither 'express' nor 'fastify'", () => {
+        app = {
+            getHttpAdapter: () => ({
+                getType: () => AdaptorTypes.ERROR,
+                getInstance: () => ({}),
+            }),
+        } as unknown as INestApplication;
+
+        expect(() => KitNestJsMiddleware(app)).toThrow(
+            `[WTHek] Unsupported HTTP adapter: ${AdaptorTypes.ERROR}`
+        );
     });
 
-    it("should set the express middleware when adaptor type is 'express'", async () => {
-        try {
+    describe("Express adapter", () => {
+        it("should set express middleware when adapter type is 'express' without options", () => {
+            const useMock = jest.fn();
             app = {
-                getHttpAdapter: () => {
-                    return {
-                        getType: () => AdaptorTypes.EXPRESS,
-                        getInstance: () => {
-                            return {
-                                setErrorHandler: jest.fn(),
-                            } as unknown as FastifyInstance;
-                        },
-                    };
-                },
-                use: jest.fn(),
+                getHttpAdapter: () => ({
+                    getType: () => AdaptorTypes.EXPRESS,
+                    getInstance: () => ({}),
+                }),
+                use: useMock,
             } as unknown as INestApplication;
-            await KitNestJsMiddleware(app);
-            expect(app.use).toHaveBeenCalled();
-        } catch (error: any) {
-            expect(error).toBe(undefined);
-        }
+
+            KitNestJsMiddleware(app);
+
+            expect(useMock).toHaveBeenCalledTimes(1);
+            expect(typeof useMock.mock.calls[0][0]).toBe("function");
+        });
+
+        it("should forward options to express middleware when options are provided", () => {
+            const spy = jest.spyOn(expressMiddlewarePkg, "KitExpressMiddleware");
+            const useMock = jest.fn();
+            app = {
+                getHttpAdapter: () => ({
+                    getType: () => AdaptorTypes.EXPRESS,
+                    getInstance: () => ({}),
+                }),
+                use: useMock,
+            } as unknown as INestApplication;
+
+            const options: IKitNestJsMiddlewareOptions = {
+                log: true,
+                handleUnknownErrors: true,
+            };
+
+            KitNestJsMiddleware(app, options);
+
+            expect(spy).toHaveBeenCalledWith(options);
+            expect(useMock).toHaveBeenCalledTimes(1);
+            spy.mockRestore();
+        });
     });
 
-    it("should set the fastify middleware when adaptor type is 'fastify'", async () => {
-        try {
+    describe("Fastify adapter", () => {
+        it("should set fastify middleware when adapter type is 'fastify' without options", () => {
+            const setErrorHandlerMock = jest.fn();
             const fastifyInstance = {
-                setErrorHandler: jest.fn(),
+                setErrorHandler: setErrorHandlerMock,
             } as unknown as FastifyInstance;
+
             app = {
-                getHttpAdapter: () => {
-                    return {
-                        getType: () => AdaptorTypes.FASTIFY,
-                        getInstance: () => {
-                            return fastifyInstance;
-                        },
-                    };
-                },
+                getHttpAdapter: () => ({
+                    getType: () => AdaptorTypes.FASTIFY,
+                    getInstance: () => fastifyInstance,
+                }),
                 use: jest.fn(),
             } as unknown as INestApplication;
-            await KitNestJsMiddleware(app);
-            expect(fastifyInstance.setErrorHandler).toHaveBeenCalled();
-        } catch (error: any) {
-            console.log(error);
-            expect(error).toBe(undefined);
-        }
+
+            KitNestJsMiddleware(app);
+
+            expect(setErrorHandlerMock).toHaveBeenCalledTimes(1);
+            expect(typeof setErrorHandlerMock.mock.calls[0][0]).toBe("function");
+        });
+
+        it("should forward options to fastify middleware when options are provided", () => {
+            const spy = jest.spyOn(fastifyMiddlewarePkg, "KitFastifyMiddleware");
+            const setErrorHandlerMock = jest.fn();
+            const fastifyInstance = {
+                setErrorHandler: setErrorHandlerMock,
+            } as unknown as FastifyInstance;
+
+            app = {
+                getHttpAdapter: () => ({
+                    getType: () => AdaptorTypes.FASTIFY,
+                    getInstance: () => fastifyInstance,
+                }),
+                use: jest.fn(),
+            } as unknown as INestApplication;
+
+            const options: IKitNestJsMiddlewareOptions = {
+                log: true,
+                handleUnknownErrors: true,
+            };
+
+            KitNestJsMiddleware(app, options);
+
+            expect(spy).toHaveBeenCalledWith(fastifyInstance, options);
+            expect(setErrorHandlerMock).toHaveBeenCalledTimes(1);
+            spy.mockRestore();
+        });
     });
 });
