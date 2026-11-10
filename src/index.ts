@@ -22,7 +22,7 @@ export interface IKitNestJsMiddlewareOptions {
      * @default false
      */
     // eslint-disable-next-line no-unused-vars
-    log?: boolean | ((error: unknown, req: any) => void);
+    log?: boolean | ((error: unknown, req: unknown) => void);
 
     /**
      * If true, catches non-Kit errors and returns a structured 500 response
