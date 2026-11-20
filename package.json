@@ -1,6 +1,6 @@
 {
     "name": "@wthek/nestjs-middleware",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "Production-safe NestJS error-handling middleware for http-error-kit. Automatically detects and supports both Express and Fastify-based NestJS applications with configurable options and structured error formatting.",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -41,6 +41,15 @@
         "status-codes",
         "api-error",
         "json-error",
+        "rfc-7807",
+        "rfc-9457",
+        "structured-errors",
+        "api-error-response",
+        "ai-agent",
+        "agent-skill",
+        "antigravity",
+        "cursor",
+        "copilot",
         "typescript",
         "middleware",
         "wthek",
@@ -55,8 +64,8 @@
     },
     "homepage": "https://github.com/Skillnter/wthek-nestjs-middleware#readme",
     "dependencies": {
-        "@wthek/express-middleware": "^1.1.0",
-        "@wthek/fastify-middleware": "^1.1.0"
+        "@wthek/express-middleware": "^1.2.0",
+        "@wthek/fastify-middleware": "^1.2.0"
     },
     "peerDependencies": {
         "@nestjs/common": "^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0"
@@ -79,6 +88,7 @@
     "files": [
         "dist/index.js",
         "dist/index.d.ts",
+        "llms.txt",
         "LICENSE"
     ],
     "funding": [

@@ -1,0 +1,66 @@
+# @wthek/nestjs-middleware
+
+> Production-safe NestJS error-handling middleware for `http-error-kit`.
+
+## Overview
+`@wthek/nestjs-middleware` provides adapter-aware error handling for NestJS applications. It inspects the underlying NestJS HTTP adapter (`express` or `fastify`) at runtime and automatically binds the corresponding engine middleware (`@wthek/express-middleware` or `@wthek/fastify-middleware`).
+
+## Installation
+```bash
+npm install @wthek/nestjs-middleware http-error-kit http-response-status-code
+```
+
+## Quick Start
+```typescript
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { KitNestJsMiddleware } from "@wthek/nestjs-middleware";
+import { BadRequestError, NotFoundError } from "http-error-kit";
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  // Automatically detects Express or Fastify adapter
+  KitNestJsMiddleware(app, { log: true, handleUnknownErrors: true });
+
+  await app.listen(3000);
+}
+bootstrap();
+```
+
+## Throwing Errors in NestJS Controllers
+```typescript
+import { Controller, Get, Param } from "@nestjs/common";
+import { NotFoundError, BadRequestError } from "http-error-kit";
+
+@Controller("users")
+export class UsersController {
+  @Get(":id")
+  findOne(@Param("id") id: string) {
+    if (!id) {
+      throw new BadRequestError("User ID must not be empty");
+    }
+    throw new NotFoundError("User not found", { id });
+  }
+}
+```
+
+## API Reference
+
+### `KitNestJsMiddleware(app: INestApplication, options?: IKitNestJsMiddlewareOptions)`
+Detects `app.getHttpAdapter().getType()` and registers the appropriate middleware:
+- For `"express"`: registers `app.use(KitExpressMiddleware(options))`
+- For `"fastify"`: registers `KitFastifyMiddleware(adapter.getInstance(), options)`
+- Throws an error for unsupported HTTP adapters.
+
+#### Options (`IKitNestJsMiddlewareOptions`)
+- `log` (`boolean | ((error: unknown, req: unknown) => void)`, default: `false`):
+  Logs error via `console.error` (Express) or `request.log.error` (Fastify Pino), or passes to custom logger callback.
+- `handleUnknownErrors` (`boolean`, default: `false`):
+  When `true`, catches non-Kit errors and returns a structured 500 JSON response instead of the framework default.
+
+## Safety Rules for AI Agents
+1. Call `KitNestJsMiddleware(app)` inside `bootstrap()` immediately after creating the NestJS app instance.
+2. Throw errors directly from `http-error-kit` (e.g., `throw new NotFoundError(...)`) inside NestJS controllers, services, or guards.
+3. NestJS exception filters can coexist; `KitNestJsMiddleware` handles uncaught errors reaching the HTTP adapter layer.
+

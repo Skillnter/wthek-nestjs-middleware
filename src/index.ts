@@ -10,6 +10,14 @@ import {
 
 /**
  * Configuration options for KitNestJsMiddleware.
+ *
+ * @example
+ * ```typescript
+ * const options: IKitNestJsMiddlewareOptions = {
+ *     log: true,
+ *     handleUnknownErrors: true,
+ * };
+ * ```
  */
 export interface IKitNestJsMiddlewareOptions {
     /**

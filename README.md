@@ -16,9 +16,9 @@ _Built for applications powered by [http-error-kit][http-error-kit], this middle
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/06de705481ac4f9db62a08328b4af81b)](https://app.codacy.com/gh/Skillnter/wthek-nestjs-middleware/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 ![npms.io (final)](https://img.shields.io/npms-io/maintenance-score/%40wthek/nestjs-middleware?color=brightgreen)
 ![npm](https://img.shields.io/npm/dy/%40wthek%2Fnestjs-middleware)
-![npm bundle size (version)](https://img.shields.io/bundlephobia/minzip/%40wthek%2Fnestjs-middleware/1.1.0)
+![npm bundle size (version)](https://img.shields.io/bundlephobia/minzip/%40wthek%2Fnestjs-middleware/1.2.0)
 ![NPM Type Definitions](https://img.shields.io/npm/types/%40wthek%2Fnestjs-middleware)
-[![Socket Badge](https://socket.dev/api/badge/npm/package/@wthek/nestjs-middleware/1.1.0)](https://socket.dev/npm/package/@wthek/nestjs-middleware/overview/1.1.0)
+[![Socket Badge](https://socket.dev/api/badge/npm/package/@wthek/nestjs-middleware/1.2.0)](https://socket.dev/npm/package/@wthek/nestjs-middleware/overview/1.2.0)
 [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-121013?logo=github&logoColor=white)](https://skillnter.github.io/wthek-nestjs-middleware/)
 [![Github Sponsors](https://img.shields.io/badge/GitHub%20Sponsors-30363D?&logo=GitHub-Sponsors&logoColor=EA4AAA)](https://github.com/sponsors/Skillnter)
 [![Open Collective](https://img.shields.io/badge/Open%20Collective-3385FF?logo=open-collective&logoColor=white)](https://opencollective.com/skillnter)
@@ -43,6 +43,7 @@ _Built for applications powered by [http-error-kit][http-error-kit], this middle
 -   [Options](#options)
 -   [How It Works](#how-it-works)
 -   [Why Use @wthek/nestjs-middleware?](#why-use-wtheknestjs-middleware)
+-   [AI Agent Integration](#ai-agent-integration)
 -   [Explore More WTHek Extensions](#explore-more-wthek-extensions)
 -   [People](#people)
 -   [Donations](#donations)
@@ -139,6 +140,17 @@ bootstrap();
 -   **No manual error mapping** – Status codes and payloads are automatically formatted.
 -   **Consistent API responses** – Standardized JSON error objects for cleaner client error handling.
 -   **Production-safe** – Response-sent guards and structured fallbacks prevent unexpected process crashes.
+
+## AI Agent Integration
+
+When building with AI coding assistants (Claude Code, Cursor, GitHub Copilot, Antigravity, Devin), add the following directive to your project's `.cursorrules`, `.github/copilot-instructions.md`, or system prompt:
+
+```markdown
+### NestJS Error Handling Rule
+- Always throw semantic error classes from `http-error-kit` (e.g., `BadRequestError`, `NotFoundError`, `UnauthorizedError`) in NestJS controllers, services, and guards.
+- In `main.ts`, register `@wthek/nestjs-middleware` right after `NestFactory.create`: `KitNestJsMiddleware(app, { handleUnknownErrors: true })`.
+- Adapters are auto-detected; no manual distinction is needed between Express and Fastify NestJS engines.
+```
 
 ## Explore More WTHek Extensions
 
